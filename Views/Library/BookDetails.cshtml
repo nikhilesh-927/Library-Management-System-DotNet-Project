@@ -1,0 +1,180 @@
+@model LibraryMember
+
+@{
+    ViewData["Title"] = "Book Issue Details";
+    string dueStatus = Model.GetDueStatus();
+    decimal fine = Model.CalculateFine();
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-8">
+
+            <!-- Navigation Breadcrumb / Button -->
+            <div class="mb-3">
+                <a asp-controller="Library" asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Issued List
+                </a>
+            </div>
+
+            <!-- Conditional Bootstrap Messages (Section 9) -->
+            @if (dueStatus == "Returned")
+            {
+                <div class="alert alert-success shadow-sm d-flex align-items-center rounded-3 mb-4" role="alert">
+                    <i class="bi bi-check-circle-fill fs-3 me-3 text-success"></i>
+                    <div>
+                        <h5 class="alert-heading mb-1 fw-bold">Book Returned Successfully</h5>
+                        <div>This book has been returned to the library archive. No fine or further action is required.</div>
+                    </div>
+                </div>
+            }
+            else if (dueStatus == "Due Soon")
+            {
+                <div class="alert alert-warning shadow-sm d-flex align-items-center rounded-3 mb-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill fs-3 me-3 text-warning"></i>
+                    <div>
+                        <h5 class="alert-heading mb-1 fw-bold">Book Due Soon!</h5>
+                        <div>The return date is approaching soon. Please notify the student to return or renew the book by @(Model.ReturnDate?.ToString("dd MMM yyyy")).</div>
+                    </div>
+                </div>
+            }
+            else if (dueStatus == "Overdue")
+            {
+                <div class="alert alert-danger shadow-sm d-flex align-items-center rounded-3 mb-4" role="alert">
+                    <i class="bi bi-exclamation-octagon-fill fs-3 me-3 text-danger"></i>
+                    <div>
+                        <h5 class="alert-heading mb-1 fw-bold">Book Overdue Warning!</h5>
+                        <div>The return date has passed. A library fine of <strong>₹@fine</strong> has accumulated at ₹10 per day.</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info shadow-sm d-flex align-items-center rounded-3 mb-4" role="alert">
+                    <i class="bi bi-info-circle-fill fs-3 me-3 text-info"></i>
+                    <div>
+                        <h5 class="alert-heading mb-1 fw-bold">Book Issued</h5>
+                        <div>This book is currently issued to the student.</div>
+                    </div>
+                </div>
+            }
+
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <div class="card-header bg-dark text-white p-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-1 fw-bold text-light">Issue Record #@Model.MemberId</h4>
+                        <span class="badge bg-primary">Category: @(Model.Book?.Category ?? "N/A")</span>
+                    </div>
+                    <div>
+                        <span class="badge @(dueStatus switch {
+                            "Returned" => "bg-success",
+                            "Due Soon" => "bg-warning text-dark",
+                            "Overdue" => "bg-danger",
+                            _ => "bg-info text-dark"
+                        }) fs-6 px-3 py-2">
+                            @dueStatus
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- Member & Student Info -->
+                    <div class="mb-4">
+                        <h5 class="text-primary fw-bold border-bottom pb-2">
+                            <i class="bi bi-person-badge me-2"></i>Student Information
+                        </h5>
+                        <div class="row g-3 mt-1">
+                            <div class="col-sm-6">
+                                <div class="text-muted small">Member Name</div>
+                                <div class="fw-bold fs-6">@Model.MemberName</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-muted small">Department</div>
+                                <div class="fw-bold fs-6">@Model.Department</div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="text-muted small">Email Address</div>
+                                <div class="fw-bold fs-6 text-primary">@Model.Email</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book Information -->
+                    <div class="mb-4">
+                        <h5 class="text-primary fw-bold border-bottom pb-2">
+                            <i class="bi bi-journal-text me-2"></i>Book Details
+                        </h5>
+                        <div class="row g-3 mt-1">
+                            <div class="col-sm-6">
+                                <div class="text-muted small">Book Title</div>
+                                <div class="fw-bold fs-5 text-dark">@(Model.Book?.Title ?? "N/A")</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-muted small">Author</div>
+                                <div class="fw-bold fs-6">@(Model.Book?.Author ?? "N/A")</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-muted small">Category</div>
+                                <div class="fw-bold fs-6">@(Model.Book?.Category ?? "N/A")</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-muted small">Book Price</div>
+                                <div class="fw-bold fs-6">₹@(Model.Book?.Price ?? 0)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Issue & Due Information -->
+                    <div class="mb-4">
+                        <h5 class="text-primary fw-bold border-bottom pb-2">
+                            <i class="bi bi-calendar-check me-2"></i>Issue Status & Fines
+                        </h5>
+                        <div class="row g-3 mt-1">
+                            <div class="col-sm-4">
+                                <div class="text-muted small">Issue Date</div>
+                                <div class="fw-bold fs-6">@Model.IssueDate.ToString("dd MMMM yyyy")</div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="text-muted small">Return Date</div>
+                                <div class="fw-bold fs-6">
+                                    @(Model.ReturnDate.HasValue ? Model.ReturnDate.Value.ToString("dd MMMM yyyy") : "No Return Date Set")
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="text-muted small">Due Status</div>
+                                <div class="fw-bold fs-6">@dueStatus</div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="p-3 bg-light rounded-3 border d-flex justify-content-between align-items-center mt-2">
+                                    <span class="fw-bold text-dark">Fine Amount Calculated (₹10 / overdue day):</span>
+                                    <span class="fs-4 fw-bold @(fine > 0 ? "text-danger" : "text-success")">
+                                        ₹@fine
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-light p-3 d-flex justify-content-between">
+                    <a asp-controller="Library" asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Index
+                    </a>
+
+                    @if (!Model.IsReturned)
+                    {
+                        <form asp-controller="Library" asp-action="ReturnBook" asp-route-id="@Model.MemberId" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-box-arrow-in-down me-1"></i> Mark as Returned
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

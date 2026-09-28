@@ -1,0 +1,9 @@
+## Ignore Visual Studio / .NET Core temporary files and build output
+.vs/
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+appsettings.Development.json
+.vscode/

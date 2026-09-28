@@ -1,0 +1,94 @@
+@{
+    ViewData["Title"] = "About College Library";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-8">
+
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <div class="card-header bg-primary text-white p-4">
+                    <h3 class="fw-bold mb-1"><i class="bi bi-bank me-2"></i>College Library Management System</h3>
+                    <p class="mb-0 text-white-50">Centralized Digital Book Issuance & Fine Management Platform</p>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <h5 class="text-primary fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>System Overview</h5>
+                    <p class="text-secondary leading-relaxed">
+                        The College Library Book Issue System is an ASP.NET Core MVC web application designed to simplify and automate 
+                        the management of book issuance, track return dates, and calculate overdue fines for college library members.
+                    </p>
+
+                    <hr class="my-4" />
+
+                    <h5 class="text-primary fw-bold mb-3"><i class="bi bi-gear-wide-connected me-2"></i>Key Features & Technologies</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border h-100">
+                                <h6 class="fw-bold text-dark"><i class="bi bi-cpu text-primary me-2"></i>MVC Architecture</h6>
+                                <p class="small text-muted mb-0">Clean separation of Model data, Controller logic, and Razor View rendering.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border h-100">
+                                <h6 class="fw-bold text-dark"><i class="bi bi-code-slash text-primary me-2"></i>C# Extension Methods</h6>
+                                <p class="small text-muted mb-0">Custom <code>GetDueStatus()</code> and <code>CalculateFine()</code> extensions on <code>LibraryMember</code>.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border h-100">
+                                <h6 class="fw-bold text-dark"><i class="bi bi-question-circle text-primary me-2"></i>Nullable Types</h6>
+                                <p class="small text-muted mb-0">Supports nullable <code>ReturnDate?</code> for books issued without set return dates.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border h-100">
+                                <h6 class="fw-bold text-dark"><i class="bi bi-ui-checks text-primary me-2"></i>Bootstrap & Tag Helpers</h6>
+                                <p class="small text-muted mb-0">Utilizes ASP.NET Core Tag Helpers (<code>asp-for</code>, <code>asp-action</code>, <code>asp-controller</code>) with Bootstrap styling.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="text-primary fw-bold mb-3"><i class="bi bi-bar-chart-line me-2"></i>Library Summary Statistics</h5>
+                    <div class="row text-center g-3 mb-4">
+                        <div class="col-4">
+                            <div class="p-3 bg-primary text-white rounded-3 shadow-sm">
+                                <div class="fs-3 fw-bold">@(ViewBag.TotalBooks ?? 5)</div>
+                                <div class="small">Total Catalog Books</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-3 bg-warning text-dark rounded-3 shadow-sm">
+                                <div class="fs-3 fw-bold">@(ViewBag.TotalIssued ?? 4)</div>
+                                <div class="small">Active Issue Records</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-3 bg-success text-white rounded-3 shadow-sm">
+                                <div class="fs-3 fw-bold">@(ViewBag.TotalReturned ?? 1)</div>
+                                <div class="small">Returned Books</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="text-primary fw-bold mb-3"><i class="bi bi-compass me-2"></i>Navigation Quick Links</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a asp-controller="Library" asp-action="Index" class="btn btn-outline-primary">
+                            <i class="bi bi-list-task me-1"></i> Index (View Issued Books)
+                        </a>
+                        <a asp-controller="Library" asp-action="IssueBook" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-1"></i> Issue Book Form
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-light p-3 text-center text-muted small">
+                    ASP.NET Core MVC • College Library Book Issue System • CIE-1 Task
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
